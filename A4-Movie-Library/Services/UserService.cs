@@ -7,37 +7,28 @@ namespace A4_Movie_Library.Services;
 public class UserService : IUserService
 {
     private readonly ILogger<IUserService> _logger;
+    private readonly IDataService _dataService;
 
-    public DataModel DataModel { get; set; }
-    private DataModel _dataModel = new();
-
-    public UserService(ILogger<UserService> logger)
+    public UserService(ILogger<IUserService> logger, IDataService dataService)
     {
         _logger = logger;
+        _dataService = dataService;
     }
-
-    public UserService()
-    {
-        DataModel = _dataModel;
-    }
-
 
     public void PopulateChoices()
     {
-        var data = new DataService();
+        _dataService.DataModel.Id = _dataService.NextId();
 
-        _dataModel.Id = data.NextId();
-
-        _dataModel.Title = AnsiConsole.Prompt(
+        _dataService.DataModel.Title = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter the movie title: ")
                 .ValidationErrorMessage("That movie is already entered.")
                 .Validate(input 
-                => !data.MatchTitle(input) 
+                => !_dataService.MatchTitle(input) 
                     ? ValidationResult.Success() 
                     : ValidationResult.Error("That movie is already entered.")
                 ));
 
-        _dataModel.Genres = AnsiConsole.Prompt(
+        _dataService.DataModel.Genres = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
                 .Title("What are the genres associated with this movie?")
                 .PageSize(20)

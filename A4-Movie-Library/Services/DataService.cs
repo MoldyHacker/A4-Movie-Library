@@ -11,45 +11,34 @@ public class DataService : IDataService
 {
     private readonly ILogger<IDataService> _logger;
     public DataModel DataModel { get; set; }
-    private DataModel _dataModel = new();
 
-    private string _fileName;
+    private string _filePath;
 
     private List<int> _movieIds;
     private List<string> _movieTitles;
     private List<string> _movieGenres;
 
-    public DataService(ILogger<DataService> logger)
+    private List<DataModel> _fileRecords;
+
+    public DataService(ILogger<IDataService> logger)
     {
         _logger = logger;
-    }
-
-    public DataService()
-    {
-        _fileName = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
-        DataModel = _dataModel;
+        _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
+        DataModel = new();
 
         _movieIds = new List<int>();
         _movieTitles = new List<string>();
         _movieGenres = new List<string>();
-        _dataModel.TitlesList = new List<string>();
+        DataModel.TitlesList = new List<string>();
     }
 
 
     public void Read()
     {
-        // _logger.Log(LogLevel.Information, "Reading");
-        // Console.WriteLine("*** I am reading");
-
-        // create parallel lists of movie details
-        // lists must be used since we do not know number of lines of data
-        // List<int> MovieIds = new List<int>();
-        // List<string> MovieTitles = new List<string>();
-        // List<string> MovieGenres = new List<string>();
-        // to populate the lists with data, read from the data file
+        _logger.LogInformation("Reading");
         try
         {
-            StreamReader sr = new StreamReader(_fileName);
+            StreamReader sr = new StreamReader(_filePath);
             // first line contains column headers
             sr.ReadLine();
             while (!sr.EndOfStream)
@@ -67,7 +56,7 @@ public class DataService : IDataService
                     _movieIds.Add(int.Parse(movieDetails[0]));
                     // 2nd array element contains movie title
                     _movieTitles.Add(movieDetails[1]);
-                    _dataModel.TitlesList.Add(movieDetails[1]);
+                    DataModel.TitlesList.Add(movieDetails[1]);
                     // 3rd array element contains movie genre(s)
                     // replace "|" with ", "
                     _movieGenres.Add(movieDetails[2].Replace("|", ", "));
@@ -83,7 +72,7 @@ public class DataService : IDataService
                     idx = line.IndexOf('"');
                     // extract the movieTitle
                     _movieTitles.Add(line.Substring(0, idx));
-                    _dataModel.TitlesList.Add(line.Substring(0, idx));
+                    DataModel.TitlesList.Add(line.Substring(0, idx));
                     // remove title and last comma from the string
                     line = line.Substring(idx + 2);
                     // replace the "|" with ", "
@@ -97,8 +86,9 @@ public class DataService : IDataService
         {
             _logger.LogError(ex.Message);
         }
-        // _logger.LogInformation("Movies in file {Count}", _movieIds.Count);
+        _logger.LogInformation("Movies in file {Count}", DataModel.TitlesList.Count);
     }
+
     public void Write(DataModel dataModelInput)
     {
         if (dataModelInput == null)
@@ -112,9 +102,9 @@ public class DataService : IDataService
             HasHeaderRecord = false
         };
 
-        using var writer = new StreamWriter(_fileName, true);
+        using var writer = new StreamWriter(_filePath, true);
 
-        // _logger.LogInformation("Writing data file");
+        _logger.LogInformation("Writing data file");
         using (var csv = new CsvWriter(writer, config))
         {
             csv.Context.RegisterClassMap<DataModelMap>();
@@ -123,6 +113,7 @@ public class DataService : IDataService
 
         writer.Close();
     }
+
     public void Display()
     {
         // Create Table
@@ -130,31 +121,32 @@ public class DataService : IDataService
         // loop thru Movie Lists
         for (int i = 0; i < _movieIds.Count; i++)
             table.AddRow(_movieIds[i], _movieTitles[i], _movieGenres[i]);
-
+        
         Console.Write(table.ToString());
     }
+
     public string NextId()
     {
         string newId;
 
         try
         { 
-            newId = (int.Parse(File.ReadLines(_fileName).Last().Split(',')[0]) + 1).ToString();
+            newId = (int.Parse(File.ReadLines(_filePath).Last().Split(',')[0]) + 1).ToString();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            _logger.LogInformation("No data found. ID set to 1");
             newId = "1";
         }
-
-        // Console.WriteLine(newId);
         return newId;
     }
+
     public bool MatchTitle(string title)
     {
-        if (_dataModel.TitlesList.Count == 0)
+        if (DataModel.TitlesList.Count == 0)
             Read();
         
-        return _dataModel.TitlesList.ConvertAll(t => t.ToLower()).Contains(title.ToLower());
+        return DataModel.TitlesList.ConvertAll(t => t.ToLower().Trim()).Contains(title.ToLower().Trim());
     }
 }

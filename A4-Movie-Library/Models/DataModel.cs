@@ -6,12 +6,11 @@ namespace A4_Movie_Library.Models
 {
     public class DataModel
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public List<string> Genres { get; set; }
-        public List<string> TitlesList { get; set; }
+        public string? Id { get; set; }
+        public string? Title { get; set; }
+        public List<string>? Genres { get; set; }
+        public List<string>? TitlesList { get; set; }
     }
-
 
     public class ListConverter : DefaultTypeConverter
     {

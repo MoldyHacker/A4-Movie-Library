@@ -3,22 +3,20 @@ namespace A4_Movie_Library.Services;
 
 public class MenuService : IMenuService
 {
-    private readonly ILogger<MenuService> _logger;
-    public MenuService(ILogger<MenuService> logger)
+    private readonly ILogger<IMenuService> _logger;
+    private readonly IUserService _userService;
+    private readonly IDataService _dataService;
+
+    public MenuService(ILogger<IMenuService> logger, IUserService userService, IDataService dataService)
     {
         _logger = logger;
-    }
-
-    public MenuService()
-    {
-
+        _userService = userService;
+        _dataService = dataService;
     }
 
     public void Invoke()
     {
         var menu = new Menu();
-        var input = new UserService();
-        var data = new DataService();
 
         Menu.MenuOptions menuChoice;
         do
@@ -28,12 +26,14 @@ public class MenuService : IMenuService
             switch (menuChoice)
             {
                 case Menu.MenuOptions.Add:
-                    input.PopulateChoices();
-                    data.Write(input.DataModel);
+                    _logger.LogInformation("add");
+                    _userService.PopulateChoices();
+                    _dataService.Write(_dataService.DataModel);
                     break;
                 case Menu.MenuOptions.Display:
-                    data.Read();
-                    data.Display();
+                    _dataService.Read();
+                    _dataService.Display();
+                    _logger.LogInformation("Read");
                     break;
             }
         } while (menuChoice != Menu.MenuOptions.Exit);

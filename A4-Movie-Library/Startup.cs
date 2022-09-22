@@ -1,6 +1,7 @@
 ﻿using A4_Movie_Library.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Spectre.Console;
 
 namespace A4_Movie_Library;
 
