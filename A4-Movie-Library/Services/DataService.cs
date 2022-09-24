@@ -125,19 +125,19 @@ public class DataService : IDataService
         Console.Write(table.ToString());
     }
 
-    public string NextId()
+    public int NextId()
     {
-        string newId;
+        int newId;
 
         try
         { 
-            newId = (int.Parse(File.ReadLines(_filePath).Last().Split(',')[0]) + 1).ToString();
+            newId = int.Parse(File.ReadLines(_filePath).Last().Split(',')[0]) + 1;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             _logger.LogInformation("No data found. ID set to 1");
-            newId = "1";
+            newId = 1;
         }
         return newId;
     }

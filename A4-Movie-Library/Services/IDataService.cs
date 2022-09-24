@@ -9,5 +9,5 @@ public interface IDataService
     void Write(DataModel dataModelInput);
     void Display();
     bool MatchTitle(string title);
-    string NextId();
+    int NextId();
 }
