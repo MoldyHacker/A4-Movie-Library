@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <None Remove="Data\movies.csv" />
+    <None Remove="Data\moviesTrunc.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\moviesTrunc.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\movies.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
