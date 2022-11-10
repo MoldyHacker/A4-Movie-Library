@@ -11,27 +11,29 @@ public class DataService : IDataService
 {
     private readonly ILogger<IDataService> _logger;
     public DataModel DataModel { get; set; }
+    public List<Movie> Movie { get; set; }
 
-    private string _filePath;
+    private string _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
 
-    private List<int> _movieIds;
-    private List<string> _movieTitles;
-    private List<string> _movieGenres;
+    // private List<int> _movieIds;
+    // private List<string> _movieTitles;
+    // private List<string> _movieGenres;
 
     private List<DataModel> _fileRecords;
 
     public DataService(ILogger<IDataService> logger)
     {
         _logger = logger;
-        _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
+        // _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
         DataModel = new();
+        Movie = new();
 
-        _movieIds = new List<int>();
-        _movieTitles = new List<string>();
-        _movieGenres = new List<string>();
+        // _movieIds = new List<int>();
+        // _movieTitles = new List<string>();
+        // _movieGenres = new List<string>();
         DataModel.TitlesList = new List<string>();
     }
-
+    
 
     public void Read()
     {
@@ -53,30 +55,35 @@ public class DataService : IDataService
                     // movie details are separated with comma(,)
                     string[] movieDetails = line.Split(',');
                     // 1st array element contains movie id
-                    _movieIds.Add(int.Parse(movieDetails[0]));
+                    // _movieIds.Add(int.Parse(movieDetails[0]));
                     // 2nd array element contains movie title
-                    _movieTitles.Add(movieDetails[1]);
+                    // _movieTitles.Add(movieDetails[1]);
                     DataModel.TitlesList.Add(movieDetails[1]);
                     // 3rd array element contains movie genre(s)
                     // replace "|" with ", "
-                    _movieGenres.Add(movieDetails[2].Replace("|", ", "));
+                    // _movieGenres.Add(movieDetails[2].Replace("|", ", "));
+
+                    Movie.Add(new Movie(int.Parse(movieDetails[0]), movieDetails[1], movieDetails[2].Replace("|",", ")));
                 }
                 else
                 {
                     // quote = comma in movie title
                     // extract the movieId
-                    _movieIds.Add(int.Parse(line.Substring(0, idx - 1)));
+                    int mId = int.Parse(line.Substring(0, idx - 1));
+                    // _movieIds.Add(mId);
                     // remove movieId and first quote from string
                     line = line.Substring(idx + 1);
                     // find the next quote
                     idx = line.IndexOf('"');
                     // extract the movieTitle
-                    _movieTitles.Add(line.Substring(0, idx));
+                    // _movieTitles.Add(line.Substring(0, idx));
                     DataModel.TitlesList.Add(line.Substring(0, idx));
                     // remove title and last comma from the string
-                    line = line.Substring(idx + 2);
+                    string genreLine = line.Substring(idx + 2).Replace("|", ", ");
                     // replace the "|" with ", "
-                    _movieGenres.Add(line.Replace("|", ", "));
+                    // _movieGenres.Add(genreLine.Replace("|", ", "));
+
+                    Movie.Add(new Movie(mId, line.Substring(0, idx), genreLine));
                 }
             }
             // close file when done
@@ -119,8 +126,9 @@ public class DataService : IDataService
         // Create Table
         Table table = new Table("ID", "Movie Title", "Genre(s)");
         // loop thru Movie Lists
-        for (int i = 0; i < _movieIds.Count; i++)
-            table.AddRow(_movieIds[i], _movieTitles[i], _movieGenres[i]);
+        foreach (var movie in Movie)
+            table.AddRow(movie.Id, movie.Title, movie.Genres);
+
         
         Console.Write(table.ToString());
     }
@@ -146,7 +154,6 @@ public class DataService : IDataService
     {
         if (DataModel.TitlesList.Count == 0)
             Read();
-        
         return DataModel.TitlesList.ConvertAll(t => t.ToLower().Trim()).Contains(title.ToLower().Trim());
     }
 }

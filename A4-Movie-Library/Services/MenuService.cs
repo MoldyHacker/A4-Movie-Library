@@ -26,14 +26,20 @@ public class MenuService : IMenuService
             switch (menuChoice)
             {
                 case Menu.MenuOptions.Add:
-                    _logger.LogInformation("add");
+                    _logger.LogInformation("Add");
                     _userService.PopulateChoices();
                     _dataService.Write(_dataService.DataModel);
                     break;
                 case Menu.MenuOptions.Display:
+                    _logger.LogInformation("Read");
                     _dataService.Read();
                     _dataService.Display();
-                    _logger.LogInformation("Read");
+                    break;
+                case Menu.MenuOptions.Search:
+                    _logger.LogInformation("Search");
+                    break;
+                case Menu.MenuOptions.Update:
+                    _logger.LogInformation("Update");
                     break;
             }
         } while (menuChoice != Menu.MenuOptions.Exit);

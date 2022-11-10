@@ -8,6 +8,8 @@ namespace A4_Movie_Library
         {
             Add,
             Display,
+            Search,
+            Update,
             Exit
         }
 
