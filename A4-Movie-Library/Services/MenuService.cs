@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using MovieLibraryEntities.Context;
+
 namespace A4_Movie_Library.Services;
 
 public class MenuService : IMenuService
@@ -31,6 +33,16 @@ public class MenuService : IMenuService
                     _dataService.Write(_dataService.DataModel);
                     break;
                 case Menu.MenuOptions.Display:
+                    // var context = new MovieContext();
+                    // var movies = context.Movies;
+
+                    using (var db = new MovieContext())
+                    {
+                        foreach (var movie in db.Movies)
+                        {
+                            Console.WriteLine(movie.Title);
+                        }
+                    }
                     _logger.LogInformation("Read");
                     _dataService.Read();
                     _dataService.Display();
