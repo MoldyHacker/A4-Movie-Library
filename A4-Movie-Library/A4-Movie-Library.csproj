@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dao\**" />
+    <EmbeddedResource Remove="Dao\**" />
+    <None Remove="Dao\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Data\movies.csv" />
   </ItemGroup>
 
@@ -45,9 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\..\OneDrive - Waukesha County Technical College\.Net Database Programming 156-101-10023-23\Module 11 -\MovieLibraryEntities-master\MovieLibraryEntities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
-﻿using A4_Movie_Library.Context;
+﻿// using A4_Movie_Library.Context;
 using A4_Movie_Library.Models;
 using Microsoft.EntityFrameworkCore;
+using MovieLibraryEntities.Context;
+using Movie = MovieLibraryEntities.Models.Movie;
 
 namespace A4_Movie_Library.Dao
 {
@@ -20,7 +22,7 @@ namespace A4_Movie_Library.Dao
             _context.Dispose();
         }
 
-        public IEnumerable<Movie> GetAll()
+        public List<MovieLibraryEntities.Models.Movie> GetAll()
         {
             return _context.Movies.ToList();
         }
