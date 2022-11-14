@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A4-Movie-Library", "A4-Movie-Library\A4-Movie-Library.csproj", "{0C653C29-6634-4C4B-BC2B-BE802E8742D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibraryEntities", "..\..\OneDrive - Waukesha County Technical College\.Net Database Programming 156-101-10023-23\Module 11 -\MovieLibraryEntities-master\MovieLibraryEntities.csproj", "{38E0ECDC-7D82-404A-888E-EABFC6C76933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibraryEntities", "MovieLibraryEntities-master\MovieLibraryEntities.csproj", "{141780A3-A699-4452-B7A9-1B7334387249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{0C653C29-6634-4C4B-BC2B-BE802E8742D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C653C29-6634-4C4B-BC2B-BE802E8742D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C653C29-6634-4C4B-BC2B-BE802E8742D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38E0ECDC-7D82-404A-888E-EABFC6C76933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38E0ECDC-7D82-404A-888E-EABFC6C76933}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38E0ECDC-7D82-404A-888E-EABFC6C76933}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38E0ECDC-7D82-404A-888E-EABFC6C76933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141780A3-A699-4452-B7A9-1B7334387249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141780A3-A699-4452-B7A9-1B7334387249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141780A3-A699-4452-B7A9-1B7334387249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141780A3-A699-4452-B7A9-1B7334387249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -55,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OneDrive - Waukesha County Technical College\.Net Database Programming 156-101-10023-23\Module 11 -\MovieLibraryEntities-master\MovieLibraryEntities.csproj" />
+    <ProjectReference Include="..\MovieLibraryEntities-master\MovieLibraryEntities.csproj" />
   </ItemGroup>
 
 </Project>
