@@ -50,29 +50,29 @@ public class MenuService : IMenuService
 
                 case Menu.MenuOptions.Display:
                     _logger.LogInformation("Display");
-                    Console.Write("With genres appended?(y/n): ");
-                    using (var db = new MovieContext()) 
-                    {
-                        var movies = db.Movies.ToList();
-                        switch (Console.ReadLine()?.ToLower())
-                        {
-                            case "y":
-                                foreach (var dbMovie in movies)
-                                {
-                                    Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
-                                    foreach (var dbMovieGenre in dbMovie.MovieGenres)
-                                        Console.WriteLine($"\t{dbMovieGenre.Genre.Name}");
-                                }
-                                break;
-                            case "n":
-                                foreach (var dbMovie in movies) 
-                                    Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
-                                break;
-                            default:
-                                _logger.LogError("Input not available.");
-                                break;
-                        }
-                    }
+                    // Console.Write("With genres appended?(y/n): ");
+                    // using (var db = new MovieContext()) 
+                    // {
+                    //     var movies = db.Movies.ToList();
+                    //     switch (Console.ReadLine()?.ToLower())
+                    //     {
+                    //         case "y":
+                    //             foreach (var dbMovie in movies)
+                    //             {
+                    //                 Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
+                    //                 foreach (var dbMovieGenre in dbMovie.MovieGenres)
+                    //                     Console.WriteLine($"\t{dbMovieGenre.Genre.Name}");
+                    //             }
+                    //             break;
+                    //         case "n":
+                    //             foreach (var dbMovie in movies) 
+                    //                 Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
+                    //             break;
+                    //         default:
+                    //             _logger.LogError("Input not available.");
+                    //             break;
+                    //     }
+                    // }
 
                     _dataService.Display();
                     // _dataService.Read();

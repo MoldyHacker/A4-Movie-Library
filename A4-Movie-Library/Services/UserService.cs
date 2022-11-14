@@ -36,8 +36,8 @@ public class UserService : IUserService
                 .MoreChoicesText("(Move up and down to reveal more genres)")
                 .InstructionsText("[grey](Press [blue]<space>[/] to toggle a class, " +
                                   "[green]<enter>[/] to accept)[/]")
-                .AddChoices("Action", "Adventure", "Animation", "Children", "Comedy", "Crime",
-                    "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror", "IMAX",
+                .AddChoices("Action", "Adventure", "Animation", "Children's", "Comedy", "Crime",
+                    "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
                     "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"));
     }
 }

@@ -1,16 +1,13 @@
 ﻿using MovieLibraryEntities.Models;
-using DataModel = A4_Movie_Library.Models.DataModel;
 using BetterConsoleTables;
 using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MovieLibraryEntities.Context;
+using DataModel = A4_Movie_Library.Models.DataModel;
 using Movie = MovieLibraryEntities.Models.Movie;
-using Genre = MovieLibraryEntities.Models.Genre;
-
-// using MovieLibraryEntities.Models;
-// using MovieGenre = A4_Movie_Library.Models.MovieGenre;
+// using Genre = MovieLibraryEntities.Models.Genre;
 
 namespace A4_Movie_Library.Services;
 
@@ -45,27 +42,27 @@ public class DatabaseService : IDatabaseService
             db.Movies.Add(movie);
             db.SaveChanges();
 
-            var newMovie = db.Movies.FirstOrDefault(m => m.Title!.Equals(dataModelInput.Title));
-            Console.WriteLine($"{newMovie!.Id} {newMovie.Title}");
+            var newMovie = db.Movies.First(m => m.Title!.Equals(dataModelInput.Title));
+            
 
             List<Genre> genreList = new List<Genre>();
-
-            // ICollection<MovieGenre> movieGenres = new List<MovieGenre>();
 
             foreach (var s in dataModelInput.Genres!)
             {
                 Genre genre = db.Genres.First(g=>g.Name.Equals(s));
                 var movieGenre = new MovieGenre() { Genre = genre, Movie = newMovie };
-                // movieGenres.Add(movieGenre);
                 db.MovieGenres.Add(movieGenre);
                 db.SaveChanges();
             }
+
+            Console.WriteLine("New Movie Added:");
+            Console.WriteLine($"{newMovie!.Id} {newMovie.Title}");
+
+            foreach (var genre in newMovie.MovieGenres)
+                Console.WriteLine($"\t{genre.Genre.Name}");
             
 
-            // var genres = new MovieGenre()
-            // {
-            //
-            // }
+
         }
         
 
@@ -95,6 +92,7 @@ public class DatabaseService : IDatabaseService
 
     public void Display()
     {
+        Console.WriteLine("Gathering movies... May take some time");
         // Create Table
         Table table = new Table("ID", "Movie Title", "Genre(s)");
         // loop thru Movie Lists
@@ -104,14 +102,13 @@ public class DatabaseService : IDatabaseService
             var movies = db.Movies.ToList();
             foreach (var dbMovie in movies)
             {
-                Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
-
                 List<string> genreList = new List<string>();
 
                 foreach (var dbMovieGenre in dbMovie.MovieGenres)
                     genreList.Add(dbMovieGenre.Genre.Name);
 
                 var genres = String.Join(", ",genreList);
+
                 table.AddRow(dbMovie.Id, dbMovie.Title, genres);
             }
         }
