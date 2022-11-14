@@ -6,10 +6,11 @@ namespace A4_Movie_Library
     {
         public enum MenuOptions
         {
-            Add,
             Display,
             Search,
+            Add,
             Update,
+            Delete,
             Exit
         }
 

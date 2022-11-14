@@ -15,22 +15,14 @@ public class DataService : IDataService
 
     private string _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
 
-    // private List<int> _movieIds;
-    // private List<string> _movieTitles;
-    // private List<string> _movieGenres;
-
     private List<DataModel> _fileRecords;
 
     public DataService(ILogger<IDataService> logger)
     {
         _logger = logger;
-        // _filePath = $"{Environment.CurrentDirectory}../../../../Data/movies.csv";
         DataModel = new();
         Movie = new();
 
-        // _movieIds = new List<int>();
-        // _movieTitles = new List<string>();
-        // _movieGenres = new List<string>();
         DataModel.TitlesList = new List<string>();
     }
     
@@ -52,18 +44,10 @@ public class DataService : IDataService
                 if (idx == -1)
                 {
                     // no quote = no comma in movie title
-                    // movie details are separated with comma(,)
                     string[] movieDetails = line.Split(',');
-                    // 1st array element contains movie id
-                    // _movieIds.Add(int.Parse(movieDetails[0]));
-                    // 2nd array element contains movie title
-                    // _movieTitles.Add(movieDetails[1]);
                     DataModel.TitlesList.Add(movieDetails[1]);
-                    // 3rd array element contains movie genre(s)
-                    // replace "|" with ", "
-                    // _movieGenres.Add(movieDetails[2].Replace("|", ", "));
-
-                    Movie.Add(new Movie(int.Parse(movieDetails[0]), movieDetails[1], movieDetails[2].Replace("|",", ")));
+                    Movie.Add(new Movie() { Id = (long)int.Parse(movieDetails[0]), Title = movieDetails[1], Genres = movieDetails[2].Replace("|", ", ") });
+                    // Movie.Add(new Movie(int.Parse(movieDetails[0]), movieDetails[1], movieDetails[2].Replace("|",", ")));
                 }
                 else
                 {
@@ -83,7 +67,8 @@ public class DataService : IDataService
                     // replace the "|" with ", "
                     // _movieGenres.Add(genreLine.Replace("|", ", "));
 
-                    Movie.Add(new Movie(mId, line.Substring(0, idx), genreLine));
+                    Movie.Add(new Movie(){Id = (long)mId, Title = line.Substring(0,idx), Genres = genreLine});
+                    // Movie.Add(new Movie(mId, line.Substring(0, idx), genreLine));
                 }
             }
             // close file when done

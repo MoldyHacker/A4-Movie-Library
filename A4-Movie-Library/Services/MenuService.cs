@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
 using MovieLibraryEntities.Context;
+using MovieLibraryEntities.Dao;
+using MovieLibraryEntities.Models;
+using A4_Movie_Library.Models;
 
 namespace A4_Movie_Library.Services;
 
@@ -7,13 +11,16 @@ public class MenuService : IMenuService
 {
     private readonly ILogger<IMenuService> _logger;
     private readonly IUserService _userService;
-    private readonly IDataService _dataService;
+    private readonly IDatabaseService _dataService;
+    // private readonly IDatabaseService _databaseService;
 
-    public MenuService(ILogger<IMenuService> logger, IUserService userService, IDataService dataService)
+
+    public MenuService(ILogger<IMenuService> logger, IUserService userService, IDatabaseService dataService)
     {
         _logger = logger;
         _userService = userService;
         _dataService = dataService;
+        // _databaseService = databaseService;
     }
 
     public void Invoke()
@@ -31,26 +38,62 @@ public class MenuService : IMenuService
                     _logger.LogInformation("Add");
                     _userService.PopulateChoices();
                     _dataService.Write(_dataService.DataModel);
-                    break;
-                case Menu.MenuOptions.Display:
-                    // var context = new MovieContext();
-                    // var movies = context.Movies;
+                    // _databaseService.Write(_dataService.DataModel);
 
-                    using (var db = new MovieContext())
+                    break;
+
+
+
+
+                case Menu.MenuOptions.Display:
+                    _logger.LogInformation("Display");
+                    Console.Write("With genres appended?(y/n): ");
+                    using (var db = new MovieContext()) 
                     {
-                        foreach (var movie in db.Movies)
+                        var movies = db.Movies.ToList();
+                        switch (Console.ReadLine()?.ToLower())
                         {
-                            Console.WriteLine(movie.Title);
+                            case "y":
+                                foreach (var dbMovie in movies)
+                                {
+                                    Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
+                                    foreach (var dbMovieGenre in dbMovie.MovieGenres)
+                                        Console.WriteLine($"\t{dbMovieGenre.Genre.Name}");
+                                }
+                                break;
+                            case "n":
+                                foreach (var dbMovie in movies) 
+                                    Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
+                                break;
+                            default:
+                                _logger.LogError("Input not available.");
+                                break;
                         }
                     }
-                    _logger.LogInformation("Read");
-                    _dataService.Read();
+
                     _dataService.Display();
+                    // _dataService.Read();
+                    // _dataService.Display();
                     break;
+
+
+
+
                 case Menu.MenuOptions.Search:
                     _logger.LogInformation("Search");
                     break;
+
+
+
+
                 case Menu.MenuOptions.Update:
+                    _logger.LogInformation("Update");
+                    break;    
+                
+
+
+
+                case Menu.MenuOptions.Delete:
                     _logger.LogInformation("Update");
                     break;
             }

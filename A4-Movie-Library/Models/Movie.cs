@@ -10,10 +10,10 @@ public class Movie : Media
     public virtual ICollection<UserMovie> UserMovies { get; set; }
 
 
-    public Movie(int id, string title, string genres)
-    {
-        Id = id;
-        Title = title;
-        Genres = genres;
-    }
+    // public Movie(int id, string title, string genres)
+    // {
+    //     Id = id;
+    //     Title = title;
+    //     Genres = genres;
+    // }
 }

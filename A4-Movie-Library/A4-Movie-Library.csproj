@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Context\**" />
     <Compile Remove="Dao\**" />
+    <EmbeddedResource Remove="Context\**" />
     <EmbeddedResource Remove="Dao\**" />
+    <None Remove="Context\**" />
     <None Remove="Dao\**" />
   </ItemGroup>
 

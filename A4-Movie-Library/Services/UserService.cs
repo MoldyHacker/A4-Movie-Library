@@ -7,9 +7,10 @@ namespace A4_Movie_Library.Services;
 public class UserService : IUserService
 {
     private readonly ILogger<IUserService> _logger;
-    private readonly IDataService _dataService;
+    private readonly IDatabaseService _dataService;
 
-    public UserService(ILogger<IUserService> logger, IDataService dataService)
+
+    public UserService(ILogger<IUserService> logger, IDatabaseService dataService)
     {
         _logger = logger;
         _dataService = dataService;
