@@ -11,8 +11,8 @@ public interface IDatabaseService
     MovieGenre WriteGenres(DataModel dataModel);
     void Display();
     void Search(string title);
-    void Update(string title);
-    void Delete(string title);
+    void Update(long id);
+    void Delete(long id);
     bool MatchTitle(string title);
     int NextId();
     

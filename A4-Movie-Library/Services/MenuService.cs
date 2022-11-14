@@ -13,7 +13,6 @@ public class MenuService : IMenuService
     private readonly ILogger<IMenuService> _logger;
     private readonly IUserService _userService;
     private readonly IDatabaseService _dataService;
-    // private readonly IDatabaseService _databaseService;
 
 
     public MenuService(ILogger<IMenuService> logger, IUserService userService, IDatabaseService dataService)
@@ -21,7 +20,6 @@ public class MenuService : IMenuService
         _logger = logger;
         _userService = userService;
         _dataService = dataService;
-        // _databaseService = databaseService;
     }
 
     public void Invoke()
@@ -41,63 +39,36 @@ public class MenuService : IMenuService
                     Console.Write("Release Date: ");
                     _dataService.DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
                     _dataService.Write(_dataService.DataModel);
-                    // _databaseService.Write(_dataService.DataModel);
-
                     break;
-
-
 
 
                 case Menu.MenuOptions.Display:
                     _logger.LogInformation("Display");
-                    // Console.Write("With genres appended?(y/n): ");
-                    // using (var db = new MovieContext()) 
-                    // {
-                    //     var movies = db.Movies.ToList();
-                    //     switch (Console.ReadLine()?.ToLower())
-                    //     {
-                    //         case "y":
-                    //             foreach (var dbMovie in movies)
-                    //             {
-                    //                 Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
-                    //                 foreach (var dbMovieGenre in dbMovie.MovieGenres)
-                    //                     Console.WriteLine($"\t{dbMovieGenre.Genre.Name}");
-                    //             }
-                    //             break;
-                    //         case "n":
-                    //             foreach (var dbMovie in movies) 
-                    //                 Console.WriteLine($"{dbMovie.Id}, {dbMovie.Title}");
-                    //             break;
-                    //         default:
-                    //             _logger.LogError("Input not available.");
-                    //             break;
-                    //     }
-                    // }
-
                     _dataService.Display();
-                    // _dataService.Read();
-                    // _dataService.Display();
                     break;
-
 
 
 
                 case Menu.MenuOptions.Search:
                     _logger.LogInformation("Search");
+                    Console.Write("Search for movie title: ");
+                    _dataService.Search(Console.ReadLine());
                     break;
-
 
 
 
                 case Menu.MenuOptions.Update:
                     _logger.LogInformation("Update");
+                    Console.WriteLine("Enter the movie ID you would like to update: ");
+                    _dataService.Update(long.Parse(Console.ReadLine()));
                     break;    
                 
 
 
-
                 case Menu.MenuOptions.Delete:
                     _logger.LogInformation("Update");
+                    Console.Write("Enter the movie ID you would like to delete: ");
+                    _dataService.Delete(long.Parse(Console.ReadLine()));
                     break;
             }
         } while (menuChoice != Menu.MenuOptions.Exit);
