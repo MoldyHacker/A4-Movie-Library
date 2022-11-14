@@ -33,10 +33,29 @@ public class DatabaseService : IDatabaseService
 
     public void Write(DataModel dataModelInput)
     {
+
+        foreach (var genre in dataModelInput.Genres)
+        {
+            
+            using (var db = new MovieContext())
+            {
+                var genres = db.Genres;
+                
+                
+
+
+            }
+        }
+
         using (var db = new MovieContext())
         {
-            var movie = new Movie();
+            var movie = new Movie(){ Title = DataModel.Title, };
         }
+    }
+
+    public MovieGenre WriteGenres(DataModel dataModel)
+    {
+        throw new NotImplementedException();
     }
 
     public void Display()
