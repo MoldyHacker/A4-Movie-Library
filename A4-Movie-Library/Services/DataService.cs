@@ -4,6 +4,8 @@ using CsvHelper;
 using System.Globalization;
 using A4_Movie_Library.Models;
 using Microsoft.Extensions.Logging;
+using MovieLibraryEntities.Models;
+using Movie= A4_Movie_Library.Models.Movie;
 
 namespace A4_Movie_Library.Services;
 
@@ -67,7 +69,7 @@ public class DataService : IDataService
                     // replace the "|" with ", "
                     // _movieGenres.Add(genreLine.Replace("|", ", "));
 
-                    Movie.Add(new Movie(){Id = (long)mId, Title = line.Substring(0,idx), Genres = genreLine});
+                    // Movie.Add(new Movie(){Id = (long)mId, Title = line.Substring(0,idx), Genres = genreLine});
                     // Movie.Add(new Movie(mId, line.Substring(0, idx), genreLine));
                 }
             }

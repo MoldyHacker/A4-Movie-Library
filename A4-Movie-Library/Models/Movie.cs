@@ -1,4 +1,6 @@
-﻿namespace A4_Movie_Library.Models;
+﻿using MovieLibraryEntities.Models;
+
+namespace A4_Movie_Library.Models;
 
 public class Movie : Media
 {

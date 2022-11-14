@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using MovieLibraryEntities.Context;
 using MovieLibraryEntities.Dao;
@@ -37,6 +38,8 @@ public class MenuService : IMenuService
                 case Menu.MenuOptions.Add:
                     _logger.LogInformation("Add");
                     _userService.PopulateChoices();
+                    Console.Write("Release Date: ");
+                    _dataService.DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
                     _dataService.Write(_dataService.DataModel);
                     // _databaseService.Write(_dataService.DataModel);
 

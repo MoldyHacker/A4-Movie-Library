@@ -10,6 +10,7 @@ namespace A4_Movie_Library.Models
         public string? Title { get; set; }
         public List<string>? Genres { get; set; }
         public List<string>? TitlesList { get; set; }
+        public DateTime ReleaseDate { get; set; }
     }
 
     public class ListConverter : DefaultTypeConverter

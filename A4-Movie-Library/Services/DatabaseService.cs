@@ -1,9 +1,14 @@
-﻿using A4_Movie_Library.Models;
+﻿using MovieLibraryEntities.Models;
+using DataModel = A4_Movie_Library.Models.DataModel;
 using BetterConsoleTables;
+using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MovieLibraryEntities.Context;
+using Movie = MovieLibraryEntities.Models.Movie;
+using Genre = MovieLibraryEntities.Models.Genre;
+
 // using MovieLibraryEntities.Models;
 // using MovieGenre = A4_Movie_Library.Models.MovieGenre;
 
@@ -26,31 +31,61 @@ public class DatabaseService : IDatabaseService
         throw new NotImplementedException();
     }
 
-    // public void Write(long id, string title, MovieGenre genre)
-    // {
-    //     throw new NotImplementedException();
-    // }
-
     public void Write(DataModel dataModelInput)
     {
-
-        foreach (var genre in dataModelInput.Genres)
-        {
-            
-            using (var db = new MovieContext())
-            {
-                var genres = db.Genres;
-                
-                
-
-
-            }
-        }
-
+        long movieId;
         using (var db = new MovieContext())
         {
-            var movie = new Movie(){ Title = DataModel.Title, };
+            var movie = new Movie()
+            {
+                Title = dataModelInput.Title,
+                ReleaseDate = dataModelInput.ReleaseDate,
+
+            };
+            db.Movies.Add(movie);
+            db.SaveChanges();
+
+            var newMovie = db.Movies.FirstOrDefault(m => m.Title!.Equals(dataModelInput.Title));
+            Console.WriteLine($"{newMovie!.Id} {newMovie.Title}");
+
+            List<Genre> genreList = new List<Genre>();
+
+            // ICollection<MovieGenre> movieGenres = new List<MovieGenre>();
+
+            foreach (var s in dataModelInput.Genres!)
+            {
+                Genre genre = db.Genres.First(g=>g.Name.Equals(s));
+                var movieGenre = new MovieGenre() { Genre = genre, Movie = newMovie };
+                // movieGenres.Add(movieGenre);
+                db.MovieGenres.Add(movieGenre);
+                db.SaveChanges();
+            }
+            
+
+            // var genres = new MovieGenre()
+            // {
+            //
+            // }
         }
+        
+
+
+
+        // List<long> genreIds = new List<long>();
+        // foreach (var genre in dataModelInput.Genres)
+        // {
+        //     using (var db = new MovieContext())
+        //     {
+        //         genreIds.Add(db.Genres.FirstOrDefault(g => g.Name.Equals(genre))!.Id);
+        //     }
+        // }
+        //
+        // MovieGenre movieGenre = new MovieGenre()
+        // {
+        //
+        // }
+
+        
     }
 
     public MovieGenre WriteGenres(DataModel dataModel)
@@ -106,7 +141,7 @@ public class DatabaseService : IDatabaseService
         try
         {
             using var db = new MovieContext();
-            newId = (int)db.Movies.OrderBy(m=>m.Id).LastOrDefault()!.Id + 1;
+            newId = (int)db.Movies.OrderBy(m=>m.Id).LastOrDefault().Id + 1;
         }
         catch (Exception ex)
         {

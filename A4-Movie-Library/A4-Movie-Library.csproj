@@ -18,6 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Genre.cs" />
+    <Compile Remove="Models\MovieGenre.cs" />
+    <Compile Remove="Models\Occupation.cs" />
+    <Compile Remove="Models\User.cs" />
+    <Compile Remove="Models\UserMovie.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="Data\movies.csv" />
   </ItemGroup>
