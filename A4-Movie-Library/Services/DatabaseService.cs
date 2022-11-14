@@ -126,8 +126,28 @@ public class DatabaseService : IDatabaseService
                 Console.WriteLine("Is this correct?(y/n): ");
                 if (Console.ReadLine().ToLower().Contains("y"))
                 {
-                    
-                    _userService.PopulateChoices();
+
+                    DataModel.Title = AnsiConsole.Prompt(
+                        new TextPrompt<string>("Enter the movie title: ")
+                            .ValidationErrorMessage("That movie is already entered.")
+                            .Validate(input
+                                => !MatchTitle(input)
+                                    ? ValidationResult.Success()
+                                    : ValidationResult.Error("That movie is already entered.")
+                            ));
+
+                    DataModel.Genres = AnsiConsole.Prompt(
+                        new MultiSelectionPrompt<string>()
+                            .Title("What are the genres associated with this movie?")
+                            .PageSize(20)
+                            .MoreChoicesText("(Move up and down to reveal more genres)")
+                            .InstructionsText("[grey](Press [blue]<space>[/] to toggle a class, " +
+                                              "[green]<enter>[/] to accept)[/]")
+                            .AddChoices("Action", "Adventure", "Animation", "Children's", "Comedy", "Crime",
+                                "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
+                                "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"));
+
+                    // _userService.PopulateChoices();
                     Console.Write("Release Date: ");
                     DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
