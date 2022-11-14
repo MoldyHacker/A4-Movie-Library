@@ -9,10 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\**" />
     <Compile Remove="Context\**" />
     <Compile Remove="Dao\**" />
+    <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="Context\**" />
     <EmbeddedResource Remove="Dao\**" />
+    <None Remove="bin\**" />
     <None Remove="Context\**" />
     <None Remove="Dao\**" />
   </ItemGroup>
@@ -38,10 +41,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="bin\Debug\net6.0\appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>

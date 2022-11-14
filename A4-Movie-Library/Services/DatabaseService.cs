@@ -19,14 +19,12 @@ namespace A4_Movie_Library.Services;
 public class DatabaseService : IDatabaseService
 {
     private readonly ILogger<IDatabaseService> _logger;
-    private readonly IUserService _userService;
     public DataModel DataModel { get; set; }
 
 
-    public DatabaseService(ILogger<IDatabaseService> logger, IUserService userService)
+    public DatabaseService(ILogger<IDatabaseService> logger)
     {
         _logger = logger;
-        _userService = userService;
         DataModel = new ();
     }
 
@@ -128,42 +126,33 @@ public class DatabaseService : IDatabaseService
                 Console.WriteLine("Is this correct?(y/n): ");
                 if (Console.ReadLine().ToLower().Contains("y"))
                 {
+                    
                     _userService.PopulateChoices();
                     Console.Write("Release Date: ");
                     DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
+
                     
+                    List<MovieGenre> listMovieGenres = new List<MovieGenre>();
+
+                    foreach (var s in DataModel.Genres!)
+                    {
+                        Genre genre = db.Genres.First(g => g.Name.Equals(s));
+                        var movieGenre = new MovieGenre() { Genre = genre, Movie = updateMovie };
+                        listMovieGenres.Add(movieGenre);
+                    }
+
+                    updateMovie.Title = DataModel.Title;
+                    updateMovie.MovieGenres = listMovieGenres;
+                    db.Movies.Update(updateMovie);
+                    db.SaveChanges();
 
 
-
-                    // string userSelection;
-                    // do
-                    // {
-                    //     Console.WriteLine("What would you like to update?" +
-                    //                       "1. Title" +
-                    //                       "2. Genres" +
-                    //                       "3. Exit" +
-                    //                       "> ");
-                    //     userSelection = Console.ReadLine();
-                    //     switch (userSelection)
-                    //     {
-                    //         case "1":
-                    //             break;
-                    //         case "2":
-                    //             break;
-                    //         case "3":
-                    //             break;
-                    //         default:
-                    //             Console.WriteLine("Input not recognized");
-                    //             break;
-                    //     }
-                    // } while (userSelection != "3");
-                    
-
+                    Console.WriteLine($"Updated movie: {updateMovie.Id}, {updateMovie.Title}");
+                    updateMovie.MovieGenres.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
                 }
                 else
-                {
                     Console.WriteLine("Exiting update selection...");
-                }
+                
             }
             else
             {

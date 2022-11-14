@@ -8,12 +8,14 @@ public class UserService : IUserService
 {
     private readonly ILogger<IUserService> _logger;
     private readonly IDatabaseService _dataService;
+    public DataModel DataModel { get; set; }
 
 
     public UserService(ILogger<IUserService> logger, IDatabaseService dataService)
     {
         _logger = logger;
         _dataService = dataService;
+        DataModel = new();
     }
 
     public void PopulateChoices()
