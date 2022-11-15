@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using MovieLibraryEntities.Models;
 using Castle.Components.DictionaryAdapter.Xml;
@@ -11,8 +12,6 @@ using DataModel = A4_Movie_Library.Models.DataModel;
 using Movie = MovieLibraryEntities.Models.Movie;
 using Table = BetterConsoleTables.Table;
 using A4_Movie_Library.Models;
-
-// using Genre = MovieLibraryEntities.Models.Genre;
 
 namespace A4_Movie_Library.Services;
 
@@ -41,14 +40,12 @@ public class DatabaseService : IDatabaseService
             var movie = new Movie()
             {
                 Title = dataModelInput.Title,
-                ReleaseDate = dataModelInput.ReleaseDate,
-
+                ReleaseDate = dataModelInput.ReleaseDate
             };
             db.Movies.Add(movie);
             db.SaveChanges();
 
             var newMovie = db.Movies.First(m => m.Title!.Equals(dataModelInput.Title));
-            
 
             List<Genre> genreList = new List<Genre>();
 
@@ -62,37 +59,39 @@ public class DatabaseService : IDatabaseService
 
             Console.WriteLine("New Movie Added:");
             Console.WriteLine($"{newMovie!.Id}, {newMovie.Title}");
-
-            foreach (var genre in newMovie.MovieGenres)
-                Console.WriteLine($"\t{genre.Genre.Name}");
+            DisplayGenres(newMovie.MovieGenres);
         }
     }
 
     public MovieGenre WriteGenres(DataModel dataModel)
     {
-        throw new NotImplementedException();
+        using (var db = new MovieContext())
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public void DisplayGenres(ICollection<MovieGenre> movieGenre)
+    {
+        movieGenre.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
     }
 
     public void Display()
     {
         Console.WriteLine("Gathering movies... May take some time");
+
         // Create Table
         Table table = new Table("ID", "Movie Title", "Genre(s)");
-        // loop thru Movie Lists
 
         using (var db = new MovieContext())
         {
             var movies = db.Movies.ToList();
+
             foreach (var dbMovie in movies)
             {
                 List<string> genreList = new List<string>();
-
-                foreach (var dbMovieGenre in dbMovie.MovieGenres)
-                    genreList.Add(dbMovieGenre.Genre.Name);
-
-                var genres = String.Join(", ",genreList);
-
-                table.AddRow(dbMovie.Id, dbMovie.Title, genres);
+                dbMovie.MovieGenres.ToList().ForEach(movieGenre => genreList.Add(movieGenre.Genre.Name));
+                table.AddRow(dbMovie.Id, dbMovie.Title, String.Join(", ", genreList));
             }
         }
 
@@ -108,7 +107,7 @@ public class DatabaseService : IDatabaseService
             foreach (var movie in listMovies)
             {
                 Console.WriteLine($"{movie.Id}, {movie.Title}");
-                movie.MovieGenres.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
+                DisplayGenres(movie.MovieGenres);
             }
         }
     }
@@ -129,11 +128,11 @@ public class DatabaseService : IDatabaseService
 
                     DataModel.Title = AnsiConsole.Prompt(
                         new TextPrompt<string>("Enter the movie title: ")
-                            .ValidationErrorMessage("That movie is already entered.")
+                            .ValidationErrorMessage("[red]That movie is already entered[/]")
                             .Validate(input
                                 => !MatchTitle(input)
                                     ? ValidationResult.Success()
-                                    : ValidationResult.Error("That movie is already entered.")
+                                    : ValidationResult.Error("[red]That movie is already entered[/]")
                             ));
 
                     DataModel.Genres = AnsiConsole.Prompt(
@@ -147,11 +146,19 @@ public class DatabaseService : IDatabaseService
                                 "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
                                 "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"));
 
-                    // _userService.PopulateChoices();
-                    Console.Write("Release Date: ");
-                    DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
+                    var releaseDate = AnsiConsole.Prompt(
+                        new TextPrompt<string>("Enter the release date: ")
+                            .ValidationErrorMessage("[red]Date out of range[/]")
+                            .Validate(input
+                                => DateTime.TryParse(input, out DateTime result)
+                                   && DateTime.Parse(input) <= DateTime.Now
+                                    ? ValidationResult.Success()
+                                    : ValidationResult.Error("[red]Not a valid date or in range[/]"))
 
-                    
+                    );
+
+                    DataModel.ReleaseDate = DateTime.Parse(releaseDate);
+
                     List<MovieGenre> listMovieGenres = new List<MovieGenre>();
 
                     foreach (var s in DataModel.Genres!)
@@ -168,11 +175,11 @@ public class DatabaseService : IDatabaseService
 
 
                     Console.WriteLine($"Updated movie: {updateMovie.Id}, {updateMovie.Title}");
-                    updateMovie.MovieGenres.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
+                    // updateMovie.MovieGenres.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
+                    DisplayGenres(updateMovie.MovieGenres);
                 }
                 else
                     Console.WriteLine("Exiting update selection...");
-                
             }
             else
             {
@@ -191,7 +198,7 @@ public class DatabaseService : IDatabaseService
             if (deleteMovie != null)
             {
                 Console.WriteLine($"Found: {deleteMovie.Id}, {deleteMovie.Title}");
-                Console.WriteLine("Is this movie correct?(y/n): ");
+                Console.Write("Is this movie correct?(y/n): ");
                 if (Console.ReadLine().ToLower().Contains("y"))
                 {
                     db.Movies.Remove(deleteMovie);

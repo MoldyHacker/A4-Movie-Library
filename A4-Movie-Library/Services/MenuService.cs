@@ -11,19 +11,21 @@ namespace A4_Movie_Library.Services;
 public class MenuService : IMenuService
 {
     private readonly ILogger<IMenuService> _logger;
-    private readonly IUserService _userService;
+    // private readonly IUserService _userService;
     private readonly IDatabaseService _dataService;
 
 
-    public MenuService(ILogger<IMenuService> logger, IUserService userService, IDatabaseService dataService)
+    public MenuService(ILogger<IMenuService> logger, IDatabaseService dataService)
     {
         _logger = logger;
-        _userService = userService;
+        // _userService = userService;
         _dataService = dataService;
     }
 
     public void Invoke()
     {
+        ILogger<IUserService> ILogger = null;
+        IUserService userService = new UserService(ILogger, _dataService);
         var menu = new Menu();
 
         Menu.MenuOptions menuChoice;
@@ -35,10 +37,7 @@ public class MenuService : IMenuService
             {
                 case Menu.MenuOptions.Add:
                     _logger.LogInformation("Add");
-                    _userService.PopulateChoices();
-                    Console.Write("Release Date: ");
-                    _dataService.DataModel.ReleaseDate = DateTime.Parse(Console.ReadLine() ?? DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                    _dataService.Write(_dataService.DataModel);
+                    _dataService.Write(userService.Populate());
                     break;
 
 
