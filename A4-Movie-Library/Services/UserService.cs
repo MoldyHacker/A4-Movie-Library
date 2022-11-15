@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using A4_Movie_Library.Models;
+﻿using A4_Movie_Library.Models;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 

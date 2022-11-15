@@ -1,17 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Eventing.Reader;
-using System.Globalization;
-using MovieLibraryEntities.Models;
-using Castle.Components.DictionaryAdapter.Xml;
-using Microsoft.EntityFrameworkCore;
+﻿using MovieLibraryEntities.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using MovieLibraryEntities.Context;
 using Spectre.Console;
 using DataModel = A4_Movie_Library.Models.DataModel;
 using Movie = MovieLibraryEntities.Models.Movie;
 using Table = BetterConsoleTables.Table;
-using A4_Movie_Library.Models;
 
 namespace A4_Movie_Library.Services;
 
@@ -34,7 +27,6 @@ public class DatabaseService : IDatabaseService
 
     public void Write(DataModel dataModelInput)
     {
-        long movieId;
         using (var db = new MovieContext())
         {
             var movie = new Movie()
