@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using MovieLibraryEntities.Models;
 
@@ -20,8 +21,8 @@ namespace MovieLibraryEntities.Context
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            optionsBuilder.UseLazyLoadingProxies().UseSqlServer(
-                configuration.GetConnectionString("MovieContext")
+            optionsBuilder.UseLazyLoadingProxies().ConfigureWarnings(w=>w.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning))
+                .UseSqlServer(configuration.GetConnectionString("MovieContext")
             );
         }
     }

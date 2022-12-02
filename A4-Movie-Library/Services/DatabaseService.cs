@@ -250,7 +250,10 @@ public class DatabaseService : IDatabaseService
         try
         {
             using var db = new MovieContext();
-            return db.Movies.Find(id)!;
+            {
+                return db.Movies.Find(id)!;
+            }
+
         }
         catch (Exception e)
         {
@@ -265,14 +268,15 @@ public class DatabaseService : IDatabaseService
         UserMovie movieUser;
         using (var db = new MovieContext())
         {
-            db.UserMovies.Add(userMovie);
+            // db.UserMovies.Add(userMovie);
+            db.UserMovies.Update(userMovie);
             db.SaveChanges();
             movieUser = db.UserMovies.FirstOrDefault(u => u.Equals(userMovie))!;
         }
 
+        Console.WriteLine("Movie Rating Updated");
         Console.WriteLine($"User:\n" +
-                          $"ID: {movieUser.User.Id}, Age: {movieUser.User.Age}, Gender: {movieUser.User.Gender}, \n" +
-                          $"\tZipcode: {movieUser.User.ZipCode}, Occupation: {movieUser.User.Occupation.Name}\n");
+                          $"ID: {movieUser.User.Id}, Age: {movieUser.User.Age}, Gender: {movieUser.User.Gender}\n");
         Search(movieUser.Movie.Title);
         Console.WriteLine($"\n" +
                           $"Rated: {movieUser.Rating}, Rated at: {movieUser.RatedAt}");
@@ -284,7 +288,10 @@ public class DatabaseService : IDatabaseService
         try
         {
             using var db = new MovieContext();
+            {
                 return db.Users.Any(u => u.Id.Equals(id));
+            }
+                
         }
         catch (Exception e)
         {
@@ -299,7 +306,10 @@ public class DatabaseService : IDatabaseService
         try
         {
             using var db = new MovieContext();
+            {
                 return db.Users.Find(id)!;
+            }
+                
         }
         catch (Exception e)
         {
@@ -319,6 +329,7 @@ public class DatabaseService : IDatabaseService
             useUser = db.Users.FirstOrDefault(u=>u.Equals(user))!;
         }
 
+        Console.WriteLine("User Added");
         Console.WriteLine($"ID: {useUser.Id}, Age: {useUser.Age}, Gender: {useUser.Gender}, \n" +
                           $"\tZipcode: {useUser.ZipCode}, Occupation: {useUser.Occupation.Name}");
 
@@ -329,7 +340,10 @@ public class DatabaseService : IDatabaseService
         try
         {
             using var db = new MovieContext();
+            {
                 return db.Movies.Any(m => m.Title.ToLower().Equals(title.ToLower()));
+            }
+
         }
         catch (Exception e)
         {

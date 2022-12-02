@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MovieLibraryEntities.Context;
 using MovieLibraryEntities.Models;
 using Spectre.Console;
+using Movie = MovieLibraryEntities.Models.Movie;
 
 namespace A4_Movie_Library.Services;
 
@@ -169,7 +170,11 @@ public class UserService : IUserService
         var movie = _dataService.ReturnMovie(movieId);
         _dataService.Search(movie.Title);
         Console.WriteLine("");
-        
+
+        var retrievedMovie = new Movie()
+            { Title = movie.Title, MovieGenres = movie.MovieGenres, ReleaseDate = movie.ReleaseDate };
+
+
         var userId = AnsiConsole.Prompt(
             new TextPrompt<long>("Enter the user ID")
                 .ValidationErrorMessage("[red]That ID is invalid[/]")
