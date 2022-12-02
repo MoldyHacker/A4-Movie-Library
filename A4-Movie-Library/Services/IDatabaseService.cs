@@ -15,5 +15,11 @@ public interface IDatabaseService
     void Delete(long id);
     bool MatchTitle(string title);
     int NextId();
-    
+    bool MatchMovieId(long id);
+    Movie ReturnMovie(long id);
+    void WriteMovieRating(UserMovie userMovie);
+    bool MatchUserId(long id);
+    User ReturnUser(long id);
+    void WriteUser(User user);
+
 }

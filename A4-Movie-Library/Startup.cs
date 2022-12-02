@@ -26,7 +26,10 @@ public class Startup
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IDatabaseService, DatabaseService>();
         services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IRepository, Repository>();
+        services.AddSingleton<IUserDataService, UserDataService>();
+        
+        // services.AddSingleton<IRepository, Repository>();
+        // services.AddSingleton<IDisposable, Repository>();
 
 
         return services.BuildServiceProvider();

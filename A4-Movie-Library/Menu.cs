@@ -11,7 +11,21 @@ namespace A4_Movie_Library
             Add,
             Update,
             Delete,
+            Back
+        }
+
+        public enum MainMenu
+        {
+            Movies,
+            Users,
             Exit
+        }
+
+        public enum MenuUser
+        {
+            AddUser,
+            AddRating,
+            Back
         }
 
         public Menu()
@@ -29,6 +43,31 @@ namespace A4_Movie_Library
                     .AddChoices(menuOptions));
 
             return (MenuOptions)Enum.Parse(typeof(MenuOptions), choice);
+        }
+
+        public MenuUser ChooseUserAction()
+        {
+            var menuOptions = Enum.GetNames(typeof(MenuUser));
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("User section options")
+                    .AddChoices(menuOptions));
+
+            return (MenuUser)Enum.Parse(typeof(MenuUser), choice);
+        }
+
+
+        public MainMenu ChooseInitialAction()
+        {
+            var menuOptions = Enum.GetNames(typeof(MainMenu));
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("What section would you like to enter?")
+                    .AddChoices(menuOptions));
+
+            return (MainMenu)Enum.Parse(typeof(MainMenu), choice);
         }
 
         public void Exit()

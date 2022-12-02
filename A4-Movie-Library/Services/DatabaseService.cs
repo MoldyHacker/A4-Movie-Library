@@ -1,6 +1,7 @@
 ﻿using MovieLibraryEntities.Models;
 using Microsoft.Extensions.Logging;
 using MovieLibraryEntities.Context;
+using MovieLibraryEntities.Dao;
 using Spectre.Console;
 using DataModel = A4_Movie_Library.Models.DataModel;
 using Movie = MovieLibraryEntities.Models.Movie;
@@ -11,12 +12,14 @@ namespace A4_Movie_Library.Services;
 public class DatabaseService : IDatabaseService
 {
     private readonly ILogger<IDatabaseService> _logger;
+    // private readonly IRepository _repo;
     public DataModel DataModel { get; set; }
 
 
     public DatabaseService(ILogger<IDatabaseService> logger)
     {
         _logger = logger;
+        // _repo = repo;
         DataModel = new ();
     }
 
@@ -227,12 +230,106 @@ public class DatabaseService : IDatabaseService
         return 1;
     }
 
+    public bool MatchMovieId(long id)
+    {
+        try
+        {
+            using var db = new MovieContext();
+                return db.Movies.Any(m => m.Id.Equals(id));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            _logger.LogInformation("Match check failed");
+            return false;
+        }
+    }
+
+    public Movie ReturnMovie(long id)
+    {
+        try
+        {
+            using var db = new MovieContext();
+            return db.Movies.Find(id)!;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            _logger.LogInformation("Match check failed");
+            return null;
+        }
+    }
+
+    public void WriteMovieRating(UserMovie userMovie)
+    {
+        UserMovie movieUser;
+        using (var db = new MovieContext())
+        {
+            db.UserMovies.Add(userMovie);
+            db.SaveChanges();
+            movieUser = db.UserMovies.FirstOrDefault(u => u.Equals(userMovie))!;
+        }
+
+        Console.WriteLine($"User:\n" +
+                          $"ID: {movieUser.User.Id}, Age: {movieUser.User.Age}, Gender: {movieUser.User.Gender}, \n" +
+                          $"\tZipcode: {movieUser.User.ZipCode}, Occupation: {movieUser.User.Occupation.Name}\n");
+        Search(movieUser.Movie.Title);
+        Console.WriteLine($"\n" +
+                          $"Rated: {movieUser.Rating}, Rated at: {movieUser.RatedAt}");
+
+    }
+
+    public bool MatchUserId(long id)
+    {
+        try
+        {
+            using var db = new MovieContext();
+                return db.Users.Any(u => u.Id.Equals(id));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            _logger.LogInformation("Match check failed");
+            return false;
+        }
+    }
+
+    public User ReturnUser(long id)
+    {
+        try
+        {
+            using var db = new MovieContext();
+                return db.Users.Find(id)!;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            _logger.LogInformation("Match check failed");
+            return null!;
+        }
+    }
+
+    public void WriteUser(User user)
+    {
+        User useUser;
+        using (var db = new MovieContext())
+        {
+            db.Users.Add(user);
+            db.SaveChanges();
+            useUser = db.Users.FirstOrDefault(u=>u.Equals(user))!;
+        }
+
+        Console.WriteLine($"ID: {useUser.Id}, Age: {useUser.Age}, Gender: {useUser.Gender}, \n" +
+                          $"\tZipcode: {useUser.ZipCode}, Occupation: {useUser.Occupation.Name}");
+
+    }
+
     public bool MatchTitle(string title)
     {
         try
         {
             using var db = new MovieContext();
-            return db.Movies.Any(m => m.Title.ToLower().Equals(title.ToLower()));
+                return db.Movies.Any(m => m.Title.ToLower().Equals(title.ToLower()));
         }
         catch (Exception e)
         {
