@@ -58,14 +58,6 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    public MovieGenre WriteGenres(DataModel dataModel)
-    {
-        using (var db = new MovieContext())
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public void DisplayGenres(ICollection<MovieGenre> movieGenre)
     {
         movieGenre.ToList().ForEach(genre => Console.WriteLine($"\t{genre.Genre.Name}"));
@@ -91,6 +83,44 @@ public class DatabaseService : IDatabaseService
         }
 
         Console.Write(table.ToString());
+    }
+
+    public void DisplayHighestRatedMovies()
+    {
+        Console.WriteLine("Gathering movies... May take some time");
+        Table table = new Table("ID","Movie Title", "Age Bracket","Genre(s)");
+
+        using (var db = new MovieContext())
+        {
+            var movies = db.Movies.ToList();
+            var userMovies = db.UserMovies.ToList();
+            List<long> agesList = new List<long>();
+            HashSet<long> ageSet = new HashSet<long>();
+            userMovies.ForEach(m=>ageSet.Add(m.User.Age));
+            var age = ageSet.ToList();
+            age.Sort();
+
+            foreach (var a in age)
+            {
+                
+            }
+
+            Dictionary<Movie, long> movieDict = new Dictionary<Movie, long>();
+            foreach (var dbMovie in movies)
+            {
+                List<Movie> mov = new List<Movie>();
+                // var userMovies = dbMovie.UserMovies.ToList().Where(m=>m.User.Age.Equals(dbMovie));
+                foreach (var movie in userMovies)
+                {
+                    if (movieDict.ContainsKey(movie.Movie))
+                    {
+                        
+                    }
+                }
+
+                dbMovie.UserMovies.ToList().ForEach(m => movieDict.Add(m.Movie, m.Rating));
+            }
+        }
     }
 
     public void Search(string? title)

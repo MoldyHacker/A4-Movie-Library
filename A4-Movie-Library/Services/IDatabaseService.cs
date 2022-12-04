@@ -8,8 +8,8 @@ public interface IDatabaseService
     DataModel DataModel { get; set; }
     void Read();
     void Write(DataModel dataModel);
-    MovieGenre WriteGenres(DataModel dataModel);
     void Display();
+    void DisplayHighestRatedMovies();
     void Search(string title);
     void Update(long id);
     void Delete(long id);
